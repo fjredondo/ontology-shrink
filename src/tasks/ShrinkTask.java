@@ -2,9 +2,6 @@ package tasks;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -20,8 +17,6 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import main.Main;
 import services.AnnotationsClustering;
 
-import org.semanticweb.owlapi.model.AxiomType;
-import org.semanticweb.owlapi.model.OWLAnnotation;
 
 /**
  * The Class ShrinkTask.
@@ -47,7 +42,8 @@ public class ShrinkTask implements Callable<ShrinkTaskResult> {
 	private int hraReduction;	
 
 	/**
-	 * Instantiates a new metric calculation task.
+	 * Performs the task of reduction of human readable content of the ontology. 
+	 * Generate a new ontology file with suffix "_output.owl".
 	 *
 	 * @param ontologyFile the ontology file
 	 */
@@ -64,9 +60,9 @@ public class ShrinkTask implements Callable<ShrinkTaskResult> {
 	}
 
 	/**
-	 * Load the ontology from a file name and set it into the metric object. 
-	 * Invoke calculate for each metric.
-	 * Set the result into a new MetricCalculationTaskResult object.
+	 * Load the ontology from a file name and randomly select annotations, with human readable content. 
+	 * RemoveAxioms from the ontology and, finally, generates a new shrunken ontology.
+	 * Set the result into a new ShrinkTaskResult object.
 	 * 
 	 * @return ShrinkTaskResult
 	 * @see java.util.concurrent.Callable#call()

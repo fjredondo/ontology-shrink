@@ -27,11 +27,10 @@ public class ShrinkTaskResult implements Serializable{
 	List<OWLOntologyChange> owlChanges;
 
 	/**
-	 * Instantiates a new metric calculation task result.
-	 *
-	 * @param metricName the metric name
-	 * @param result the result
-	 * @param owlFile the owl file
+	 * Allows to print OWLOntologyChanges.
+	 * 
+	 * @param owlChanges
+	 * @param owlFile
 	 */
 	public ShrinkTaskResult(List<OWLOntologyChange> owlChanges, String owlFile) {
 		super();

@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
@@ -112,7 +110,6 @@ public class AnnotationsClustering {
 	/** The ontology. */
 	private OWLOntology ontology;
 	
-	//private Set<OWLAnnotationAssertionAxiom> annotationSet = new HashSet<OWLAnnotationAssertionAxiom>();
 	private Set<OWLAnnotationAssertionAxiom> namesSet = new HashSet<OWLAnnotationAssertionAxiom>();
 	private Set<OWLAnnotationAssertionAxiom> synonymsSet = new HashSet<OWLAnnotationAssertionAxiom>();;
 	private Set<OWLAnnotationAssertionAxiom> descriptionsSet = new HashSet<OWLAnnotationAssertionAxiom>();;
@@ -167,6 +164,7 @@ public class AnnotationsClustering {
 	}
 
 	/**
+	 * Obtain a Set<OWLAnnotationAssertionAxiom> to remove from the ontology
 	 * 
 	 * @param percentage
 	 */
@@ -191,7 +189,14 @@ public class AnnotationsClustering {
 		
 	}
 	
-	
+	/**
+	 * Choose randomly a p number elements from the input set.
+	 * 
+	 * @param <E>
+	 * @param p_set
+	 * @param p
+	 * @return Set<E>
+	 */
 	private <E> Set<E> getRandomSetElement(Set<E> p_set, int p) {
 		int r = 0;
 		Set<E> newSet = new HashSet<E>();

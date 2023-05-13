@@ -44,7 +44,7 @@ public class Main {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
 	 */
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException {
 		CommandLine cmd = generateOptions(args);
 		setLogLevel(cmd.getOptionValue('l', Level.INFO.getName()));
 		
@@ -82,7 +82,7 @@ public class Main {
 	}
 	
 	/**
-	 * Execute without task executor.
+	 * Execute task .
 	 *
 	 * @param outputFile the output file
 	 * @param tasks the tasks
