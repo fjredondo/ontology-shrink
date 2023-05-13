@@ -2,9 +2,7 @@ package tasks;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.LogRecord;
 import java.util.stream.Collectors;
 
 import org.semanticweb.owlapi.model.OWLOntologyChange;
