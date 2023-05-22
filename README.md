@@ -40,12 +40,3 @@ Where
 - **input** is an owl ontology path.
 - **HRA_reduction** is the Percentage of human readable annotation reduction.
 
-## Dependencies
-If you want to test, modify or compile the application from the source code, you will need to download the following libraries that are used by the application:
-
-- **commons-cli-1.4.jar**, used for parsing the command line arguments. [Link](https://commons.apache.org/proper/commons-cli/).
-- **ontoenrich-core-2.0.0.jar**, used to perform operations on the ontologies. The source code of this library is not available yet, but it is supported by several publications:
-    -  [https://link.springer.com/chapter/10.1007/978-3-319-17966-7_25](https://link.springer.com/chapter/10.1007/978-3-319-17966-7_25)
-    - [https://hal.archives-ouvertes.fr/hal-03155057/](https://hal.archives-ouvertes.fr/hal-03155057/)
-
-You can download these libraries from [here](http://semantics.inf.um.es/ontology-metrics-libs/libs.zip).

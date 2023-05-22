@@ -1,4 +1,4 @@
-package services;
+package es.um.dis.tecnomod.ontologyShrink.services;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,8 +13,8 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import main.Main;
-import main.Prefixes;
+import es.um.dis.tecnomod.ontologyShrink.main.Main;
+import es.um.dis.tecnomod.ontologyShrink.main.Prefixes;
 
 public class AnnotationsClustering {
 	

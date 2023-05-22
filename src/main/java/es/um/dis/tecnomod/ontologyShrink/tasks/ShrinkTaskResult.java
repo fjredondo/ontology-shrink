@@ -1,4 +1,4 @@
-package tasks;
+package es.um.dis.tecnomod.ontologyShrink.tasks;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 
-import main.Main;
+import es.um.dis.tecnomod.ontologyShrink.main.Main;
 
 /**
  * The Class ShrinkTaskResult.

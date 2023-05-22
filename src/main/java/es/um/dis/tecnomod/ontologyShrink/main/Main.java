@@ -1,4 +1,4 @@
-package main;
+package es.um.dis.tecnomod.ontologyShrink.main;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +15,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-
-import tasks.ShrinkTask;
-import tasks.ShrinkTaskResult;
+import es.um.dis.tecnomod.ontologyShrink.tasks.ShrinkTask;
+import es.um.dis.tecnomod.ontologyShrink.tasks.ShrinkTaskResult;
 
 /**
  * The Class Main.
