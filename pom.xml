@@ -71,12 +71,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.ontoenrich</groupId>
-			<artifactId>ontoenrich-core</artifactId>
-			<version>${ontoenrich-core.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>au.csiro</groupId>
 			<artifactId>elk-owlapi5</artifactId>
 			<version>${elk.version}</version>
