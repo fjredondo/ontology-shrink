@@ -1,4 +1,4 @@
-package main;
+package es.um.dis.tecnomod.ontologyShrink.main;
 
 /**
  * The Class Prefixes.

@@ -1,7 +1,8 @@
-package tasks;
+package es.um.dis.tecnomod.ontologyShrink.tasks;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -10,12 +11,14 @@ import java.util.logging.Logger;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.RemoveAxiom;
 
-import main.Main;
-import services.AnnotationsClustering;
+import es.um.dis.tecnomod.ontologyShrink.main.Main;
+import es.um.dis.tecnomod.ontologyShrink.services.AnnotationsClustering;
 
 
 /**
@@ -23,8 +26,6 @@ import services.AnnotationsClustering;
  */
 public class ShrinkTask implements Callable<ShrinkTaskResult> {
 	
-	/** The Constant DETAIL_FILES_FOLDER. */
-//	private static final String DETAIL_FILES_FOLDER = "detailed_files";
 	
 	/** The Constant LOGGER. */
 	private final static Logger LOGGER = Logger.getLogger(Main.class.getName());
@@ -55,7 +56,7 @@ public class ShrinkTask implements Callable<ShrinkTaskResult> {
 		String inputFullName = ontologyFile.getName();
 		String inputJustName = inputFullName.substring(0, inputFullName.lastIndexOf("."));
 		String inputFileExtension = inputFullName.split("\\.")[1];
-		outputOWLFile = new File(ontologyFile.getParent() + File.separatorChar + inputJustName +"_output." + inputFileExtension);		
+		outputOWLFile = new File(ontologyFile.getParent() + File.separatorChar + inputJustName +"_reduced." + inputFileExtension);		
 		
 	}
 
@@ -80,7 +81,8 @@ public class ShrinkTask implements Callable<ShrinkTaskResult> {
 		
 		LOGGER.log(Level.INFO, String.format("%s\t-Removing annotations.. ", ontologyFile.getName()));
 
-		List<OWLOntologyChange> owlChanges = ontologyManager.removeAxioms(ontology, annotationsSet);
+		List<OWLOntologyChange> owlChanges = this.getOWLOntologyChanges(ontology, annotationsSet);
+		
 		ontologyManager.applyChanges(owlChanges);
 		ontology = ontologyManager.getOntology(ontology.getOntologyID());
 		ontologyManager.saveOntology(ontology, fout);
@@ -94,6 +96,15 @@ public class ShrinkTask implements Callable<ShrinkTaskResult> {
 		return result;
 	}
 	
+	private List<OWLOntologyChange> getOWLOntologyChanges(OWLOntology ontology,
+			Set<OWLAnnotationAssertionAxiom> annotationsSet) {
+		List<OWLOntologyChange> changes = new ArrayList<>();
+		for (OWLAxiom axiom : annotationsSet) {
+			changes.add(new RemoveAxiom(ontology, axiom));
+		}
+		return changes;
+	}
+
 	/**
 	 * Gets the ontology file.
 	 *
