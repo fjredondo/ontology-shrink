@@ -31,7 +31,7 @@ public class ShrinkTask implements Callable<ShrinkTaskResult> {
 	private final static Logger LOGGER = Logger.getLogger(Main.class.getName());
 	
 	/** The ontology file. */
-	private File ontologyFile;
+	private File inputOWLFile;
 	
 	/** The output ontology file. */
 	private File outputOWLFile;	
@@ -46,18 +46,13 @@ public class ShrinkTask implements Callable<ShrinkTaskResult> {
 	 * Performs the task of reduction of human readable content of the ontology. 
 	 * Generate a new ontology file with suffix "_output.owl".
 	 *
-	 * @param ontologyFile the ontology file
+	 * @param inputOWLFile the ontology file
 	 */
-	public ShrinkTask(File ontologyFile, int hraReduction) {
+	public ShrinkTask(File inputOWLFile, File outputOWLFile, int hraReduction) {
 		super();
-		this.ontologyFile = ontologyFile;
+		this.inputOWLFile = inputOWLFile;
 		this.hraReduction = hraReduction;
-		
-		String inputFullName = ontologyFile.getName();
-		String inputJustName = inputFullName.substring(0, inputFullName.lastIndexOf("."));
-		String inputFileExtension = inputFullName.split("\\.")[1];
-		outputOWLFile = new File(ontologyFile.getParent() + File.separatorChar + inputJustName +"_reduced." + inputFileExtension);		
-		
+		this.outputOWLFile = outputOWLFile;		
 	}
 
 	/**
@@ -71,15 +66,15 @@ public class ShrinkTask implements Callable<ShrinkTaskResult> {
 	@Override
 	public ShrinkTaskResult call() throws Exception {
 		OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
-		LOGGER.log(Level.INFO, String.format("Loading %s", ontologyFile.getName()));
-		ontology = ontologyManager.loadOntologyFromOntologyDocument(ontologyFile);
-		LOGGER.log(Level.INFO, String.format("%s loaded", ontologyFile.getName()));
+		LOGGER.log(Level.INFO, String.format("Loading %s", inputOWLFile.getName()));
+		ontology = ontologyManager.loadOntologyFromOntologyDocument(inputOWLFile);
+		LOGGER.log(Level.INFO, String.format("%s loaded", inputOWLFile.getName()));
 		
 		Set<OWLAnnotationAssertionAxiom> annotationsSet = new AnnotationsClustering(ontology).getRandomAnnotationsSubset(hraReduction);
 		
 		FileOutputStream  fout = new FileOutputStream(outputOWLFile);
 		
-		LOGGER.log(Level.INFO, String.format("%s\t-Removing annotations.. ", ontologyFile.getName()));
+		LOGGER.log(Level.INFO, String.format("%s\t-Removing annotations.. ", inputOWLFile.getName()));
 
 		List<OWLOntologyChange> owlChanges = this.getOWLOntologyChanges(ontology, annotationsSet);
 		
@@ -111,7 +106,7 @@ public class ShrinkTask implements Callable<ShrinkTaskResult> {
 	 * @return the ontology file
 	 */
 	public File getOntologyFile(){
-		return this.ontologyFile;
+		return this.inputOWLFile;
 	}
 
 }
