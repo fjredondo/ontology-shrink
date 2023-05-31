@@ -48,6 +48,7 @@ public class Main {
 		setLogLevel(cmd.getOptionValue('l', Level.INFO.getName()));
 		
 		File inputOWLFile = new File(cmd.getOptionValue('i'));
+		File outputOWLFile = new File(cmd.getOptionValue('o'));
 		
 		if (!inputOWLFile.exists()) {
 			LOGGER.log(Level.SEVERE, String.format("'%s' not found.", args[0]));
@@ -66,7 +67,7 @@ public class Main {
 		
 		String inputFullName = inputOWLFile.getName();
 		String inputJustName = inputFullName.substring(0, inputFullName.lastIndexOf("."));
-		File outputLog = new File(inputOWLFile.getParent() + File.separatorChar + inputJustName +"_output.log");
+		File outputLog = new File(inputOWLFile.getParent() + File.separatorChar + inputJustName +"_reduction" + hraReductionArg +".log");
 	
 		FileHandler fh = new FileHandler(outputLog.getPath()); 
         fh.setFormatter(new SimpleFormatter()); 
@@ -74,7 +75,7 @@ public class Main {
 		
 		if (inputOWLFile.isFile()) {
 			
-			ShrinkTask task = new ShrinkTask(inputOWLFile, hraReduction);
+			ShrinkTask task = new ShrinkTask(inputOWLFile, outputOWLFile, hraReduction);
 			executeTask(outputLog, task);
 		}
 
@@ -115,9 +116,13 @@ public class Main {
         input.setRequired(true);
         options.addOption(input);
         
-        input = new Option("r", "HRA_reduction", true, "Percentage of human readable annotation reduction.");
-        input.setRequired(true);
-        options.addOption(input);
+        Option output = new Option("o", "output", true, "output file.");
+        output.setRequired(true);
+        options.addOption(output);
+        
+        Option reduction = new Option("r", "HRA_reduction", true, "Percentage of human readable annotation reduction.");
+        reduction.setRequired(true);
+        options.addOption(reduction);
         
         Option logLevel = new Option("l", "log-level", true, "log level (SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST|ALL )");
         logLevel.setRequired(false);
