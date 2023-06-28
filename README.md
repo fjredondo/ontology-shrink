@@ -3,6 +3,8 @@ Command line java application for ontology that reduce the human readable conten
  
 Particularly, this application is able to remove a percentage of names, synonyms and descriptions (types of AnnotationAssertionAxioms) from the ontology. It generates a new ontology with less human readable content.
 
+If multiple reduction percentages are entered, an equal number of reduced output files will be returned. 
+
 ### Identified annotations properties for describing names, synonyms, and descriptions
 - *Name*
     - http://www.w3.org/2004/02/skos/core#prefLabel
@@ -38,5 +40,5 @@ Particularly, this application is able to remove a percentage of names, synonyms
 Where
 
 - **input** is an owl ontology path.
-- **HRA_reduction** is the Percentage of human readable annotation reduction.
+- **HRA_reduction** is a percentage (int) list of human readable annotation reduction separated by ','.
 
