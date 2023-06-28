@@ -5,6 +5,14 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.logging.FileHandler;
 
 import org.apache.commons.cli.CommandLine;
@@ -48,35 +56,78 @@ public class Main {
 		setLogLevel(cmd.getOptionValue('l', Level.INFO.getName()));
 		
 		File inputOWLFile = new File(cmd.getOptionValue('i'));
-		File outputOWLFile = new File(cmd.getOptionValue('o'));
 		
 		if (!inputOWLFile.exists()) {
 			LOGGER.log(Level.SEVERE, String.format("'%s' not found.", args[0]));
 			return;
 		}
 		
-		int hraReduction = 0;
-		String hraReductionArg = cmd.getOptionValue('r');
+		List<Integer> hraReductionList = Collections.emptyList();
+		String hraReductionArgList = cmd.getOptionValue('r');
+		
 		try {
-			hraReduction = Integer.parseInt(hraReductionArg);
-		}catch(NumberFormatException e) {
-			LOGGER.log(Level.SEVERE, String.format("'%s' not percentaje.", hraReductionArg));
+			hraReductionList = Stream.of(hraReductionArgList.split(","))
+			  .map(String::trim)
+			  .map(Integer::parseInt).sorted().distinct()
+			  .collect(Collectors.toList());
+			if (hraReductionList.get(0) < 0 || hraReductionList.get(hraReductionList.size() - 1) > 100) {
+				LOGGER.log(Level.INFO,"Percentaje not in range [0,100]");
+				throw new Exception("Percentaje not in range [0,100]");
+			}
+
+			LOGGER.log(Level.INFO,Arrays.toString(hraReductionList.toArray()));
+		}catch(Exception e) {
+			LOGGER.log(Level.SEVERE, String.format("'%s' not a percentaje(int) list separated by ','.", hraReductionArgList));
 			return;
 		}
 		
-		
 		String inputFullName = inputOWLFile.getName();
 		String inputJustName = inputFullName.substring(0, inputFullName.lastIndexOf("."));
-		File outputLog = new File(inputOWLFile.getParent() + File.separatorChar + inputJustName +"_reduction" + hraReductionArg +".log");
-	
-		FileHandler fh = new FileHandler(outputLog.getPath()); 
-        fh.setFormatter(new SimpleFormatter()); 
-		LOGGER.addHandler(fh); 
-		
-		if (inputOWLFile.isFile()) {
+		Optional<String> inputExtension = Optional.ofNullable(inputFullName)
+			      .filter(f -> f.contains("."))
+			      .map(f -> f.substring(inputFullName.lastIndexOf(".") + 1));
+		try {
 			
-			ShrinkTask task = new ShrinkTask(inputOWLFile, outputOWLFile, hraReduction);
-			executeTask(outputLog, task);
+			File outputLog = new File(inputOWLFile.getParent() + File.separatorChar + inputJustName +"_shrink" +".log");
+
+			FileHandler fh = new FileHandler(outputLog.getPath()); 
+	        fh.setFormatter(new SimpleFormatter()); 
+			LOGGER.addHandler(fh); 
+			
+			Integer previousReduction = 0;
+			File previousInputFile = inputOWLFile;
+			
+			for (Integer hraReduction : hraReductionList) {
+				
+				Integer increaseReduction = hraReduction - previousReduction;
+				
+				LOGGER.log(Level.INFO, String.format("'%s' percent annotation additional reduction begins...", increaseReduction.toString()));
+				
+				if (inputOWLFile.isFile()) {
+					
+					String ouputFullName = inputOWLFile.getParent() + File.separatorChar + inputJustName +"_reduced_"+ String.format("%03d", hraReduction) +"." + inputExtension.get();
+					
+					File outputOWLFile = new File(ouputFullName);
+					
+					LOGGER.log(Level.INFO, String.format("'%s' -> '%s' percent reduction -> '%s'", previousInputFile.getName(), increaseReduction.toString(), outputOWLFile.getName()));
+					
+					ShrinkTask task = new ShrinkTask(previousInputFile, outputOWLFile, increaseReduction);
+					executeTask(outputLog, task);
+					
+					previousInputFile = outputOWLFile;
+					
+				}
+				
+				LOGGER.log(Level.INFO, String.format("'%s' percent annotation cumulative reduction has ended.", hraReduction.toString()));
+				
+				previousReduction = hraReduction;
+				
+				
+	        }
+
+
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, e.toString());
 		}
 
 	}
@@ -116,11 +167,7 @@ public class Main {
         input.setRequired(true);
         options.addOption(input);
         
-        Option output = new Option("o", "output", true, "output file.");
-        output.setRequired(true);
-        options.addOption(output);
-        
-        Option reduction = new Option("r", "HRA_reduction", true, "Percentage of human readable annotation reduction.");
+        Option reduction = new Option("r", "HRA_reduction", true, "Percentage (int) list of human readable annotation reduction separated by ','");
         reduction.setRequired(true);
         options.addOption(reduction);
         
