@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.um.dis.tecnomod</groupId>
 	<artifactId>ontology-shrink</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<properties>
 		<commons-cli.version>1.4</commons-cli.version>
 		<graphlib.version>0.0.3</graphlib.version>
@@ -84,5 +84,14 @@
 			<artifactId>commons-collections4</artifactId>
 			<version>${commons-collections4.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.9.1</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 </project>
