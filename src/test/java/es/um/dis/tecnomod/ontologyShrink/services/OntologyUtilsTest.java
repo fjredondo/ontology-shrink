@@ -35,5 +35,21 @@ class OntologyUtilsTest {
 		OntologyUtils.removeUnclassifiedAnnotations(ontology);
 		ontology.saveOntology(new FileOutputStream(new File("/home/fabad/legibility_embeddings_clean/ontologies/so/so_clean.owl")));
 	}
+	
+	@Test
+	void testHelis() throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
+		OWLOntology ontology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(new File("/home/fabad/legibility_embeddings_clean/ontologies/helis/helis.owl"));
+		OntologyUtils.removeObsoloteEntities(ontology);
+		OntologyUtils.removeUnclassifiedAnnotations(ontology);
+		ontology.saveOntology(new FileOutputStream(new File("/home/fabad/legibility_embeddings_clean/ontologies/helis/helis_clean.owl")));
+	}
+	
+	@Test
+	void testFoodon() throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
+		OWLOntology ontology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(new File("/home/fabad/legibility_embeddings_clean/ontologies/foodon/foodon.owl"));
+		OntologyUtils.removeObsoloteEntities(ontology);
+		OntologyUtils.removeUnclassifiedAnnotations(ontology);
+		ontology.saveOntology(new FileOutputStream(new File("/home/fabad/legibility_embeddings_clean/ontologies/foodon/foodon_clean.owl")));
+	}
 
 }

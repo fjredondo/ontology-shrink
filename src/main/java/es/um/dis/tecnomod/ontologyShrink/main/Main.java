@@ -56,6 +56,7 @@ public class Main {
 		setLogLevel(cmd.getOptionValue('l', Level.INFO.getName()));
 		
 		File inputOWLFile = new File(cmd.getOptionValue('i'));
+		Optional prefix = Optional.ofNullable(cmd.getOptionValue('o'));
 		
 		if (!inputOWLFile.exists()) {
 			LOGGER.log(Level.SEVERE, String.format("'%s' not found.", args[0]));
@@ -104,8 +105,12 @@ public class Main {
 				LOGGER.log(Level.INFO, String.format("'%s' percent annotation additional reduction begins...", increaseReduction.toString()));
 				
 				if (inputOWLFile.isFile()) {
-					
-					String ouputFullName = inputOWLFile.getParent() + File.separatorChar + inputJustName +"_reduced_"+ String.format("%03d", hraReduction) +"." + inputExtension.get();
+					String ouputFullName;
+					if (prefix.isPresent()) {
+						ouputFullName = prefix.get() +"_"+ String.format("%d", hraReduction) +"." + inputExtension.get();
+					} else {
+						ouputFullName = inputOWLFile.getParent() + File.separatorChar + inputJustName +"_"+ String.format("%d", hraReduction) +"." + inputExtension.get();
+					}
 					
 					File outputOWLFile = new File(ouputFullName);
 					
@@ -170,6 +175,10 @@ public class Main {
         Option reduction = new Option("r", "HRA_reduction", true, "Percentage (int) list of human readable annotation reduction separated by ','");
         reduction.setRequired(true);
         options.addOption(reduction);
+        
+        Option prefix = new Option("o", "output_prefix", true, "Prefix used for saving the output owl files. For example, if prefix is GO and reductions are '20,40,60', output files will be GO_20.owl, GO_40.owl and GO_60.owl");
+        prefix.setRequired(false);
+        options.addOption(prefix);
         
         Option logLevel = new Option("l", "log-level", true, "log level (SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST|ALL )");
         logLevel.setRequired(false);
